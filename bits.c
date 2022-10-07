@@ -26,5 +26,5 @@ uint8_t get_bit(uint8_t A[], int k)
     int pos = k % 8;
     unsigned int flag = 1;
     flag = flag << pos;
-    return (A[i] & flag != 0); // compare xxXxx & 00100 - getting needed bit
+    return ((A[i] & flag) != 0); // compare xxXxx & 00100 - getting needed bit
 }
