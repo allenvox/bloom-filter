@@ -3,13 +3,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 char *bloom_prefix = "[bloom filter]";
 
 unsigned int bloom_FNVHash(const char *key, int i)
 {
-    unsigned int hash_value = 0x811c9dc5 - i;
+    unsigned int hash_value = 0x811c9dc5 - i; // for different hash functions
     while(*key) {
         hash_value ^= (unsigned int)*key++;
         hash_value *= 0x01000193; // fnv_32_prime
@@ -29,13 +28,13 @@ int bloom_optimalHashNumber(unsigned int n, unsigned int m)         // n - numbe
 
 BloomFilter *bloom_init(unsigned int n)
 {
-    printf("%s n = %d\n", bloom_prefix, n);
+    printf("%s n (elements) = %d\n", bloom_prefix, n);
     BloomFilter *f = malloc(sizeof(BloomFilter));
     if(f != NULL) {
         printf("%s malloc *f - success\n", bloom_prefix);
     }
     f->m = bloom_optimalFilterSize(n, 0.005);
-    printf("%s m = %d\n", bloom_prefix, f->m);
+    printf("%s m (optimal filter size) = %d\n", bloom_prefix, f->m);
     int arraySize = (int) ceil(f->m / 8.0);
     f->bits = malloc(sizeof(uint8_t) * arraySize);
     if(f->bits != NULL) {
@@ -45,7 +44,7 @@ BloomFilter *bloom_init(unsigned int n)
         f->bits[i] = 0;
     }
     f->k = bloom_optimalHashNumber(n, f->m);
-    printf("%s k = %d\n", bloom_prefix, f->k);
+    printf("%s k (optimal hash functions number) = %d\n", bloom_prefix, f->k);
     return f;
 }
 
@@ -63,9 +62,7 @@ int bloom_lookup(BloomFilter *f, const char *s)
 
 void bloom_insert(BloomFilter *f, const char *s)
 {
-    if(bloom_lookup(f, s)) {
-        printf("%s probably inserted '%s' before\n", bloom_prefix, s);
-    } else {
+    if(!bloom_lookup(f, s)){
         for(int i = 0; i < f->k; i++) {
             set_bit(f->bits, bloom_FNVHash(s, i) % f->m);
         }
