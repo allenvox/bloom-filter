@@ -6,12 +6,12 @@
 
 char *bloom_prefix = "[bloom filter]";
 
-unsigned int bloom_FNVHash(const char *key, int i)
+unsigned int bloom_FNVHash(const char *key, int i) // fnv-1a
 {
-    unsigned int hash_value = 0x811c9dc5 - i; // for different hash functions
+    unsigned int hash_value = 2166136261 - i; // for different hash functions
     while(*key) {
         hash_value ^= (unsigned int)*key++;
-        hash_value *= 0x01000193; // fnv_32_prime
+        hash_value *= 16777619; // fnv_32_prime
     }
     return hash_value;
 }
