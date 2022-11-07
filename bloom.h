@@ -8,7 +8,7 @@ typedef struct {
     int k; // number of hash functions
 } BloomFilter;
 
-unsigned int fnv_hash(char *key, int i);
+unsigned int bloom_FNVHash(const char *key, int i);
 int bloom_optimalFilterSize(unsigned int n, double p);
 int bloom_optimalHashNumber(unsigned int n, unsigned int m);
 BloomFilter *bloom_init(unsigned int n);
