@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define BITS_FOR_TYPE 8.0
+#define FNV_32_PRIME 16777619
+#define FALSEPOSITIVE_PROBABILITY 0.005 // 0.5%
+
 char *bloom_prefix = "[bloom filter]";
 
 unsigned int bloom_FNVHash(const char *key, int i) // fnv-1a
@@ -11,7 +15,7 @@ unsigned int bloom_FNVHash(const char *key, int i) // fnv-1a
     unsigned int hash_value = 2166136261 - i; // for different hash functions
     while(*key) {
         hash_value ^= (unsigned int)*key++;
-        hash_value *= 16777619; // fnv_32_prime
+        hash_value *= FNV_32_PRIME;
     }
     return hash_value;
 }
@@ -33,9 +37,9 @@ BloomFilter *bloom_init(unsigned int n)
     if(f != NULL) {
         printf("%s malloc *f - success\n", bloom_prefix);
     }
-    f->m = bloom_optimalFilterSize(n, 0.005);
+    f->m = bloom_optimalFilterSize(n, FALSEPOSITIVE_PROBABILITY);
     printf("%s m (optimal filter size) = %d\n", bloom_prefix, f->m);
-    int arraySize = (int) ceil(f->m / 8.0);
+    int arraySize = (int) ceil(f->m / BITS_FOR_TYPE);
     f->bits = malloc(sizeof(uint8_t) * arraySize);
     if(f->bits != NULL) {
         printf("%s malloc f->bits - success\n", bloom_prefix);
