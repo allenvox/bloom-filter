@@ -1,7 +1,8 @@
 #include "bloom.h"
+#define N 10
 
 int main() {
-    BloomFilter *f = bloom_init(10);
+    BloomFilter *f = bloom_init(N);
     for(int i = 0; i < 2; i++) {
         bloom_insert(f, "apple");
         bloom_insert(f, "coconut");
