@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BITS_FOR_TYPE 8.0
+#define BITS_FOR_TYPE 8.0 // for uint8_t
 #define FNV_32_PRIME 16777619
 #define FALSEPOSITIVE_PROBABILITY 0.005 // 0.5%
 

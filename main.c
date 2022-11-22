@@ -1,5 +1,5 @@
 #include "bloom.h"
-#define N 10
+#define N 10 // number of elements
 
 int main() {
     BloomFilter *f = bloom_init(N);
