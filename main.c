@@ -1,8 +1,7 @@
 #include "bloom.h"
-#define N 10 // number of elements
 
 int main() {
-    BloomFilter *f = bloom_init(N);
+    BloomFilter *f = bloom_init(10, 0.01); // create a filter of 10 elements with falsepositive probability 1%
     for(int i = 0; i < 2; i++) {
         bloom_insert(f, "apple");
         bloom_insert(f, "coconut");
