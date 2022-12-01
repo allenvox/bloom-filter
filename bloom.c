@@ -3,11 +3,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #define BITS_FOR_TYPE 8.0 // for uint8_t
 #define FNV_32_PRIME 16777619
-#define FALSEPOSITIVE_PROBABILITY 0.01 // 1%
-
 char *bloom_prefix = "[bloom filter]";
 
 unsigned int bloom_FNVHash(const char *key, int i) // fnv-1a
@@ -30,14 +27,14 @@ int bloom_optimalHashNumber(unsigned int n, unsigned int m)         // n - numbe
     return (unsigned int) ceil(((double) m / (double) n) * log(2));
 }
 
-BloomFilter *bloom_init(unsigned int n)
+BloomFilter *bloom_init(unsigned int number_of_elements, double falsepositive_probability)
 {
-    printf("%s n (elements) = %d\n", bloom_prefix, n);
+    printf("%s n (elements) = %d\n", bloom_prefix, number_of_elements);
     BloomFilter *f = malloc(sizeof(BloomFilter));
     if(f != NULL) {
         printf("%s malloc *f - success\n", bloom_prefix);
     }
-    f->m = bloom_optimalFilterSize(n, FALSEPOSITIVE_PROBABILITY);
+    f->m = bloom_optimalFilterSize(number_of_elements, falsepositive_probability);
     printf("%s m (optimal filter size) = %d\n", bloom_prefix, f->m);
     int arraySize = (int) ceil(f->m / BITS_FOR_TYPE);
     f->bits = malloc(sizeof(uint8_t) * arraySize);
@@ -47,7 +44,7 @@ BloomFilter *bloom_init(unsigned int n)
     for(int i = 0; i < arraySize; i++) {
         f->bits[i] = 0;
     }
-    f->k = bloom_optimalHashNumber(n, f->m);
+    f->k = bloom_optimalHashNumber(number_of_elements, f->m);
     printf("%s k (optimal hash functions number) = %d\n", bloom_prefix, f->k);
     return f;
 }
