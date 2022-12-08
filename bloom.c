@@ -30,13 +30,14 @@ int bloom_optimalHashNumber(unsigned int n, unsigned int m)         // n - numbe
 BloomFilter *bloom_init(unsigned int number_of_elements, double falsepositive_probability)
 {
     printf("%s n (elements) = %d\n", bloom_prefix, number_of_elements);
+    printf("%s p (falsepositive probability) = %.1f%%\n", bloom_prefix, falsepositive_probability*100);
     BloomFilter *f = malloc(sizeof(BloomFilter));
     if(f != NULL) {
         printf("%s malloc *f - success\n", bloom_prefix);
     }
     f->m = bloom_optimalFilterSize(number_of_elements, falsepositive_probability);
-    printf("%s m (optimal filter size) = %d\n", bloom_prefix, f->m);
     int arraySize = (int) ceil(f->m / BITS_FOR_TYPE);
+    printf("%s m (optimal filter size) = %d (%d bytes)\n", bloom_prefix, f->m, arraySize);
     f->bits = malloc(sizeof(uint8_t) * arraySize);
     if(f->bits != NULL) {
         printf("%s malloc f->bits - success\n", bloom_prefix);
