@@ -33,22 +33,26 @@ int bloom_optimalHashNumber(unsigned int n, unsigned int m)         // n - numbe
 
 BloomFilter *bloom_init(unsigned int number_of_elements, double falsepositive_probability)
 {
-    printf("%s n (elements) = %d\n", bloom_prefix, number_of_elements);
-    printf("%s p (falsepositive probability) = %.1f%%\n", bloom_prefix, falsepositive_probability*100);
+    printf("%s elements = %d\n", bloom_prefix, number_of_elements);
+    printf("%s falsepositive probability = %.1f%%\n", bloom_prefix, falsepositive_probability*100);
+
     BloomFilter *f = malloc(sizeof(BloomFilter));
     if(f != NULL) {
-        printf("%s malloc *f - success\n", bloom_prefix);
+        printf("%s malloc(filter) - success\n", bloom_prefix);
     }
+
     f->m = bloom_optimalFilterSize(number_of_elements, falsepositive_probability);
     int arraySize = (int) ceil(f->m / BITS_FOR_TYPE);
-    printf("%s m (optimal filter size) = %d (%d bytes)\n", bloom_prefix, f->m, arraySize);
+    printf("%s optimal filter size = %d (%d bytes)\n", bloom_prefix, f->m, arraySize);
+
     f->bits = malloc(sizeof(uint8_t) * arraySize);
     if(f->bits != NULL) {
-        printf("%s malloc f->bits - success\n", bloom_prefix);
+        printf("%s malloc(bits) - success\n", bloom_prefix);
     }
     for(int i = 0; i < arraySize; i++) {
         f->bits[i] = 0;
     }
+
     f->k = bloom_optimalHashNumber(number_of_elements, f->m);
     printf("%s k (optimal hash functions number) = %d\n", bloom_prefix, f->k);
     return f;
@@ -68,10 +72,8 @@ int bloom_lookup(BloomFilter *f, const char *s)
 
 void bloom_insert(BloomFilter *f, const char *s)
 {
-    if(!bloom_lookup(f, s)){
-        for(int i = 0; i < f->k; i++) {
-            set_bit(f->bits, bloom_FNVHash(s, i) % f->m);
-        }
-        printf("%s successfully inserted '%s'\n", bloom_prefix, s);
+    for(int i = 0; i < f->k; i++) {
+        set_bit(f->bits, bloom_FNVHash(s, i) % f->m);
     }
+    printf("%s inserted '%s'\n", bloom_prefix, s);
 }
