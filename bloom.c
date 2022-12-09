@@ -17,6 +17,10 @@ unsigned int bloom_FNVHash(const char *key, int i) // fnv-1a
     return hash_value;
 }
 
+void bloom_free(BloomFilter *f) {
+    free(f->bits);
+}
+
 int bloom_optimalFilterSize(unsigned int n, double p)                       // n - number of elements
 {                                                                           // p - probability of false positive
     return (unsigned int) ceil(-((double) n * log(p)) / (log(2) * log(2)));

@@ -13,3 +13,4 @@ int bloom_optimalHashNumber(unsigned int n, unsigned int m);
 BloomFilter *bloom_init(unsigned int number_of_elements, double falsepositive_probability);
 int bloom_lookup(BloomFilter *f, const char *s);
 void bloom_insert(BloomFilter *f, const char *s);
+void bloom_free(BloomFilter *f);
