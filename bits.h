@@ -1,5 +1,4 @@
 #pragma once
-
 #include <inttypes.h>
 
 void set_bit(uint8_t A[], int k);
