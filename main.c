@@ -131,6 +131,18 @@ void filter_searching_out(BloomFilter *f) {
     bloom_lookup(f, "pumpkin");
     bloom_lookup(f, "corn");
     bloom_lookup(f, "onion");
+    bloom_lookup(f, "garlic");
+    bloom_lookup(f, "cauliflower");
+    bloom_lookup(f, "pepper");
+    bloom_lookup(f, "ginger");
+    bloom_lookup(f, "beans");
+    bloom_lookup(f, "peas");
+    bloom_lookup(f, "carrot");
+    bloom_lookup(f, "raddish");
+    bloom_lookup(f, "broccoli");
+    bloom_lookup(f, "turnip");
+    bloom_lookup(f, "mint");
+    bloom_lookup(f, "spinach");
     t = wtime() - t;
     printf("Took %.3f seconds\n", t);
 }
@@ -146,6 +158,18 @@ void ht_searching_out(listnode **hashtab, int size) {
     hashtab_lookup(hashtab, "pumpkin", size);
     hashtab_lookup(hashtab, "corn", size);
     hashtab_lookup(hashtab, "onion", size);
+    hashtab_lookup(hashtab, "garlic", size);
+    hashtab_lookup(hashtab, "cauliflower", size);
+    hashtab_lookup(hashtab, "pepper", size);
+    hashtab_lookup(hashtab, "ginger", size);
+    hashtab_lookup(hashtab, "beans", size);
+    hashtab_lookup(hashtab, "peas", size);
+    hashtab_lookup(hashtab, "carrot", size);
+    hashtab_lookup(hashtab, "raddish", size);
+    hashtab_lookup(hashtab, "broccoli", size);
+    hashtab_lookup(hashtab, "turnip", size);
+    hashtab_lookup(hashtab, "mint", size);
+    hashtab_lookup(hashtab, "spinach", size);
     t = wtime() - t;
     printf("Took %.3f seconds\n", t);
 }
