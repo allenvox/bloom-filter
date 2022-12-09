@@ -1,7 +1,7 @@
 all: main
 
 .PHONY: main
-main: main.c bloom.c bits.c
+main: main.c bloom.c bits.c hashtab.c
 	gcc -Wall -Wextra -o $@ $^
 
 clean:
