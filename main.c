@@ -11,7 +11,6 @@ double wtime() {
 }
 
 void filter_inserting(BloomFilter *f) {
-    double t = wtime();
     bloom_insert(f, "apple");
     bloom_insert(f, "coconut");
     bloom_insert(f, "watermelon");
@@ -32,40 +31,33 @@ void filter_inserting(BloomFilter *f) {
     bloom_insert(f, "peach");
     bloom_insert(f, "lemon");
     bloom_insert(f, "pear");
-    t = wtime() - t;
-    printf("Took %.3f seconds\n", t);
 }
 
-void ht_inserting(listnode **hashtab, int size) {
-    int collisions = 0;
-    double t = wtime();
+void ht_inserting(listnode **hashtab, int size, int *collisions) {
     int v = 1;
-    hashtab_add(hashtab, "apple", v++, size, &collisions);
-    hashtab_add(hashtab, "coconut", v++, size, &collisions);
-    hashtab_add(hashtab, "watermelon", v++, size, &collisions);
-    hashtab_add(hashtab, "pomegranate", v++, size, &collisions);
-    hashtab_add(hashtab, "pineapple", v++, size, &collisions);
-    hashtab_add(hashtab, "grapes", v++, size, &collisions);
-    hashtab_add(hashtab, "orange", v++, size, &collisions);
-    hashtab_add(hashtab, "banana", v++, size, &collisions);
-    hashtab_add(hashtab, "melon", v++, size, &collisions);
-    hashtab_add(hashtab, "dragonfruit", v++, size, &collisions);
-    hashtab_add(hashtab, "strawberry", v++, size, &collisions);
-    hashtab_add(hashtab, "blueberry", v++, size, &collisions);
-    hashtab_add(hashtab, "blackberry", v++, size, &collisions);
-    hashtab_add(hashtab, "cherry", v++, size, &collisions);
-    hashtab_add(hashtab, "apricot", v++, size, &collisions);
-    hashtab_add(hashtab, "kiwi", v++, size, &collisions);
-    hashtab_add(hashtab, "lime", v++, size, &collisions);
-    hashtab_add(hashtab, "peach", v++, size, &collisions);
-    hashtab_add(hashtab, "lemon", v++, size, &collisions);
-    hashtab_add(hashtab, "pear", v++, size, &collisions);
-    t = wtime() - t;
-    printf("Took %.3f seconds, made %d collisions\n", t, collisions);
+    hashtab_add(hashtab, "apple", v++, size, collisions);
+    hashtab_add(hashtab, "coconut", v++, size, collisions);
+    hashtab_add(hashtab, "watermelon", v++, size, collisions);
+    hashtab_add(hashtab, "pomegranate", v++, size, collisions);
+    hashtab_add(hashtab, "pineapple", v++, size, collisions);
+    hashtab_add(hashtab, "grapes", v++, size, collisions);
+    hashtab_add(hashtab, "orange", v++, size, collisions);
+    hashtab_add(hashtab, "banana", v++, size, collisions);
+    hashtab_add(hashtab, "melon", v++, size, collisions);
+    hashtab_add(hashtab, "dragonfruit", v++, size, collisions);
+    hashtab_add(hashtab, "strawberry", v++, size, collisions);
+    hashtab_add(hashtab, "blueberry", v++, size, collisions);
+    hashtab_add(hashtab, "blackberry", v++, size, collisions);
+    hashtab_add(hashtab, "cherry", v++, size, collisions);
+    hashtab_add(hashtab, "apricot", v++, size, collisions);
+    hashtab_add(hashtab, "kiwi", v++, size, collisions);
+    hashtab_add(hashtab, "lime", v++, size, collisions);
+    hashtab_add(hashtab, "peach", v++, size, collisions);
+    hashtab_add(hashtab, "lemon", v++, size, collisions);
+    hashtab_add(hashtab, "pear", v++, size, collisions);
 }
 
 void filter_searching_in(BloomFilter *f) {
-    double t = wtime();
     bloom_lookup(f, "apple");
     bloom_lookup(f, "coconut");
     bloom_lookup(f, "watermelon");
@@ -86,12 +78,9 @@ void filter_searching_in(BloomFilter *f) {
     bloom_lookup(f, "peach");
     bloom_lookup(f, "lemon");
     bloom_lookup(f, "pear");
-    t = wtime() - t;
-    printf("Took %.3f seconds\n", t);
 }
 
 void ht_searching_in(listnode **hashtab, int size) {
-    double t = wtime();
     hashtab_lookup(hashtab, "apple", size);
     hashtab_lookup(hashtab, "coconut", size);
     hashtab_lookup(hashtab, "watermelon", size);
@@ -112,12 +101,9 @@ void ht_searching_in(listnode **hashtab, int size) {
     hashtab_lookup(hashtab, "peach", size);
     hashtab_lookup(hashtab, "lemon", size);
     hashtab_lookup(hashtab, "pear", size);
-    t = wtime() - t;
-    printf("Took %.3f seconds\n", t);
 }
 
 void filter_searching_out(BloomFilter *f) {
-    double t = wtime();
     bloom_lookup(f, "tomato");
     bloom_lookup(f, "aubergine");
     bloom_lookup(f, "potato");
@@ -138,12 +124,9 @@ void filter_searching_out(BloomFilter *f) {
     bloom_lookup(f, "turnip");
     bloom_lookup(f, "mint");
     bloom_lookup(f, "spinach");
-    t = wtime() - t;
-    printf("Took %.3f seconds\n", t);
 }
 
 void ht_searching_out(listnode **hashtab, int size) {
-    double t = wtime();
     hashtab_lookup(hashtab, "tomato", size);
     hashtab_lookup(hashtab, "aubergine", size);
     hashtab_lookup(hashtab, "potato", size);
@@ -164,30 +147,88 @@ void ht_searching_out(listnode **hashtab, int size) {
     hashtab_lookup(hashtab, "turnip", size);
     hashtab_lookup(hashtab, "mint", size);
     hashtab_lookup(hashtab, "spinach", size);
-    t = wtime() - t;
-    printf("Took %.3f seconds\n", t);
 }
 
 int main() {
-    int size = 20;
+    double start, end, t;
+    int col = 0;
+    printf("Initialization:\n");
+    int size = 100000;
     BloomFilter *f = bloom_init(size, 0.01); // create a filter of 10 elements with falsepositive probability 1%
     listnode **hashtab = malloc(sizeof(listnode*) * size);
     hashtab_init(hashtab, size);
-
+    /*
     printf("\nAdding fruits to Bloom filter:\n");
+    start = wtime();
     filter_inserting(f);
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+
     printf("\nAdding fruits to hash table with closed addressation:\n");
-    ht_inserting(hashtab, size);
+    start = wtime();
+    ht_inserting(hashtab, size, &col);
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds, made %d collisions\n", t, col);
 
     printf("\nLookup elements that already are in Bloom filter:\n");
+    start = wtime();
     filter_searching_in(f);
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+
     printf("\nLookup elements that already are in hash table:\n");
+    start = wtime();
     ht_searching_in(hashtab, size);
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
 
     printf("\nLookup elements that are not in Bloom filter:\n");
+    start = wtime();
     filter_searching_out(f);
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+
     printf("\nLookup elements that are not in hash table:\n");
+    start = wtime();
     ht_searching_out(hashtab, size);
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);*/
+
+    char words[200000][8];
+    FILE *inp = fopen("words.txt", "r");
+    for(int i = 0; !feof(inp); i++) {
+        char r = (char)fgetc(inp);
+        int k = 0;
+        while (r != '\n' && !feof(inp)) {
+            words[i][k++] = r;
+            r = (char)fgetc(inp);
+        }
+        words[i][k] = '\0';
+    }
+
+    printf("\nInserting 100000 words in Bloom filter:\n");
+    start = wtime();
+    for(int i = 0; i < 100000; i++) {
+        bloom_insert(f, words[i]);
+    }
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+
+    printf("\nInserting 100000 words in hash table:\n");
+    start = wtime();
+    for(int i = 0; i < 100000; i++) {
+        hashtab_add(hashtab, words[i], i, size, &col);
+    }
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds, made %d collisions\n", t, col);
 
     bloom_free(f);
     return 0;
