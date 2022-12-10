@@ -11,7 +11,6 @@ double wtime() {
 }
 
 void filter_inserting(BloomFilter *f) {
-    printf("\nAdding fruits to Bloom filter:\n");
     double t = wtime();
     bloom_insert(f, "apple");
     bloom_insert(f, "coconut");
@@ -38,7 +37,6 @@ void filter_inserting(BloomFilter *f) {
 }
 
 void ht_inserting(listnode **hashtab, int size) {
-    printf("\nAdding fruits to hash table with closed addressation:\n");
     int collisions = 0;
     double t = wtime();
     int v = 1;
@@ -67,7 +65,6 @@ void ht_inserting(listnode **hashtab, int size) {
 }
 
 void filter_searching_in(BloomFilter *f) {
-    printf("\nLookup elements that already are in Bloom filter:\n");
     double t = wtime();
     bloom_lookup(f, "apple");
     bloom_lookup(f, "coconut");
@@ -94,7 +91,6 @@ void filter_searching_in(BloomFilter *f) {
 }
 
 void ht_searching_in(listnode **hashtab, int size) {
-    printf("\nLookup elements that already are in hash table:\n");
     double t = wtime();
     hashtab_lookup(hashtab, "apple", size);
     hashtab_lookup(hashtab, "coconut", size);
@@ -121,7 +117,6 @@ void ht_searching_in(listnode **hashtab, int size) {
 }
 
 void filter_searching_out(BloomFilter *f) {
-    printf("\nLookup elements that are not in Bloom filter:\n");
     double t = wtime();
     bloom_lookup(f, "tomato");
     bloom_lookup(f, "aubergine");
@@ -148,7 +143,6 @@ void filter_searching_out(BloomFilter *f) {
 }
 
 void ht_searching_out(listnode **hashtab, int size) {
-    printf("\nLookup elements that are not in hash table:\n");
     double t = wtime();
     hashtab_lookup(hashtab, "tomato", size);
     hashtab_lookup(hashtab, "aubergine", size);
@@ -180,13 +174,19 @@ int main() {
     listnode **hashtab = malloc(sizeof(listnode*) * size);
     hashtab_init(hashtab, size);
 
+    printf("\nAdding fruits to Bloom filter:\n");
     filter_inserting(f);
+    printf("\nAdding fruits to hash table with closed addressation:\n");
     ht_inserting(hashtab, size);
 
+    printf("\nLookup elements that already are in Bloom filter:\n");
     filter_searching_in(f);
+    printf("\nLookup elements that already are in hash table:\n");
     ht_searching_in(hashtab, size);
 
+    printf("\nLookup elements that are not in Bloom filter:\n");
     filter_searching_out(f);
+    printf("\nLookup elements that are not in hash table:\n");
     ht_searching_out(hashtab, size);
 
     bloom_free(f);
