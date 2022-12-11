@@ -9,7 +9,7 @@ void hashtab_init(listnode **hashtab, int size) {
     for (int i = 0; i < size; i++) {
         hashtab[i] = NULL;
     }
-    printf("%s elements = 20\n", hashtab_prefix);
+    printf("%s elements = %d\n", hashtab_prefix, size);
 }
 
 void hashtab_add(listnode **hashtab, char *key, int value, int size, int *collision) {
