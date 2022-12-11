@@ -7,7 +7,7 @@
 double wtime() {
     struct timespec time;
     clock_gettime(CLOCK_REALTIME, &time);
-    return ((double)time.tv_sec + (double)time.tv_nsec * 1E-6);
+    return ((double)time.tv_sec + (double)time.tv_nsec / 10000000);
 }
 
 void filter_inserting(BloomFilter *f) {
@@ -229,6 +229,24 @@ int main() {
     end = wtime();
     t = end - start;
     printf("Took %.3f seconds, made %d collisions\n", t, col);
+
+    printf("\nLooking up 100000 words that are not in Bloom filter:\n");
+    start = wtime();
+    for(int i = 100000; i < 200000; i++) {
+        bloom_lookup(f, words[i]);
+    }
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+
+    printf("\nLooking up 100000 words that are not in hash table:\n");
+    start = wtime();
+    for(int i = 100000; i < 200000; i++) {
+        hashtab_lookup(hashtab, words[i], size);
+    }
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
 
     bloom_free(f);
     return 0;
