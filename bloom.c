@@ -62,11 +62,11 @@ int bloom_lookup(BloomFilter *f, const char *s)
 {
     for(int i = 0; i < f->k; i++) {
         if(get_bit(f->bits, bloom_FNVHash(s, i) % f->m) == 0) {
-            //printf("%s '%s' is not in filter\n", bloom_prefix, s);
+            printf("%s '%s' is not in filter\n", bloom_prefix, s);
             return 0;
         }
     }
-    //printf("%s '%s' is probably in filter\n", bloom_prefix, s);
+    printf("%s '%s' is probably in filter\n", bloom_prefix, s);
     return 1;
 }
 
@@ -75,5 +75,5 @@ void bloom_insert(BloomFilter *f, const char *s)
     for(int i = 0; i < f->k; i++) {
         set_bit(f->bits, bloom_FNVHash(s, i) % f->m);
     }
-    //printf("%s inserted '%s'\n", bloom_prefix, s);
+    printf("%s inserted '%s'\n", bloom_prefix, s);
 }

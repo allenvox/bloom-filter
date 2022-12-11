@@ -26,7 +26,7 @@ void hashtab_add(listnode **hashtab, char *key, int value, int size, int *collis
             node->next = hashtab[index];
             hashtab[index] = node;
         }
-        //printf("%s inserted '%s':'%d'\n", hashtab_prefix, key, value);
+        printf("%s inserted '%s':'%d'\n", hashtab_prefix, key, value);
     } else {
         printf("Error while allocating memory\n");
     }
@@ -37,11 +37,11 @@ listnode *hashtab_lookup(listnode **hashtab, char *key, int size) {
     int index = bloom_FNVHash(key, 0) % size;
     for (node = hashtab[index]; node != NULL; node = node->next) {
         if (strcmp(node->key, key) == 0) {
-            //printf("%s '%s' found\n", hashtab_prefix, key);
+            printf("%s '%s' found\n", hashtab_prefix, key);
             return node;
         }
     }
-    //printf("%s '%s' not found\n", hashtab_prefix, key);
+    printf("%s '%s' not found\n", hashtab_prefix, key);
     return NULL;
 }
 
