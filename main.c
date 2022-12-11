@@ -7,7 +7,7 @@
 double wtime() {
     struct timespec time;
     clock_gettime(CLOCK_REALTIME, &time);
-    return ((double)time.tv_sec + (double)time.tv_nsec / 10000000);
+    return ((double)time.tv_sec + (double)time.tv_nsec / 100000000);
 }
 
 void filter_inserting(BloomFilter *f) {
@@ -153,11 +153,11 @@ int main() {
     double start, end, t;
     int col = 0;
     printf("Initialization:\n");
-    int size = 100000;
+    int size = 20;
     BloomFilter *f = bloom_init(size, 0.01); // create a filter of 10 elements with falsepositive probability 1%
     listnode **hashtab = malloc(sizeof(listnode*) * size);
     hashtab_init(hashtab, size);
-    /*
+    
     printf("\nAdding fruits to Bloom filter:\n");
     start = wtime();
     filter_inserting(f);
@@ -198,9 +198,11 @@ int main() {
     ht_searching_out(hashtab, size);
     end = wtime();
     t = end - start;
-    printf("Took %.3f seconds\n", t);*/
+    printf("Took %.3f seconds\n\n", t);
 
-    char words[200000][8];
+    bloom_free(f);
+    
+    /*char words[200000][8];
     FILE *inp = fopen("words.txt", "r");
     for(int i = 0; !feof(inp); i++) {
         char r = (char)fgetc(inp);
@@ -212,42 +214,65 @@ int main() {
         words[i][k] = '\0';
     }
 
+    size = 100000;
+    BloomFilter *f2 = bloom_init(size, 0.05);
+    listnode **hashtab2 = malloc(sizeof(listnode*) * size);
+    hashtab_init(hashtab2, size);
+
     printf("\nInserting 100000 words in Bloom filter:\n");
     start = wtime();
     for(int i = 0; i < 100000; i++) {
-        bloom_insert(f, words[i]);
+        bloom_insert(f2, words[i]);
     }
     end = wtime();
     t = end - start;
     printf("Took %.3f seconds\n", t);
-
+    
     printf("\nInserting 100000 words in hash table:\n");
     start = wtime();
     for(int i = 0; i < 100000; i++) {
-        hashtab_add(hashtab, words[i], i, size, &col);
+        hashtab_add(hashtab2, words[i], i, size, &col);
     }
     end = wtime();
     t = end - start;
     printf("Took %.3f seconds, made %d collisions\n", t, col);
 
+    printf("\nLooking up 100000 words that are in Bloom filter:\n");
+    start = wtime();
+    for(int i = 0; i < 100000; i++) {
+        bloom_lookup(f2, words[i]);
+    }
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+    
+    printf("\nLooking up 100000 words that are in hash table:\n");
+    start = wtime();
+    for(int i = 0; i < 100000; i++) {
+        hashtab_lookup(hashtab2, words[i], size);
+    }
+    end = wtime();
+    t = end - start;
+    printf("Took %.3f seconds\n", t);
+    
     printf("\nLooking up 100000 words that are not in Bloom filter:\n");
     start = wtime();
     for(int i = 100000; i < 200000; i++) {
-        bloom_lookup(f, words[i]);
+        bloom_lookup(f2, words[i]);
     }
     end = wtime();
     t = end - start;
     printf("Took %.3f seconds\n", t);
-
+    
     printf("\nLooking up 100000 words that are not in hash table:\n");
     start = wtime();
     for(int i = 100000; i < 200000; i++) {
-        hashtab_lookup(hashtab, words[i], size);
+        hashtab_lookup(hashtab2, words[i], size);
     }
     end = wtime();
     t = end - start;
     printf("Took %.3f seconds\n", t);
 
-    bloom_free(f);
+    bloom_free(f2);*/
     return 0;
 }
