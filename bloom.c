@@ -19,6 +19,7 @@ unsigned int bloom_FNVHash(const char *key, int i) // fnv-1a
 
 void bloom_free(BloomFilter *f) {
     free(f->bits);
+    free(f);
 }
 
 int bloom_optimalFilterSize(unsigned int n, double p)                       // n - number of elements
