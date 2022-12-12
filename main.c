@@ -57,6 +57,29 @@ void ht_inserting(listnode **hashtab, int size, int *collisions) {
     hashtab_add(hashtab, "pear", v++, size, collisions);
 }
 
+void ht_deletion(listnode **hashtab, int size) {
+    hashtab_delete(hashtab, "apple", size);
+    hashtab_delete(hashtab, "coconut", size);
+    hashtab_delete(hashtab, "watermelon", size);
+    hashtab_delete(hashtab, "pomegranate", size);
+    hashtab_delete(hashtab, "pineapple", size);
+    hashtab_delete(hashtab, "grapes", size);
+    hashtab_delete(hashtab, "orange", size);
+    hashtab_delete(hashtab, "banana", size);
+    hashtab_delete(hashtab, "melon", size);
+    hashtab_delete(hashtab, "dragonfruit", size);
+    hashtab_delete(hashtab, "strawberry", size);
+    hashtab_delete(hashtab, "blueberry", size);
+    hashtab_delete(hashtab, "blackberry", size);
+    hashtab_delete(hashtab, "cherry", size);
+    hashtab_delete(hashtab, "apricot", size);
+    hashtab_delete(hashtab, "kiwi", size);
+    hashtab_delete(hashtab, "lime", size);
+    hashtab_delete(hashtab, "peach", size);
+    hashtab_delete(hashtab, "lemon", size);
+    hashtab_delete(hashtab, "pear", size);
+}
+
 void filter_searching_in(BloomFilter *f) {
     bloom_lookup(f, "apple");
     bloom_lookup(f, "coconut");
@@ -198,9 +221,11 @@ int main() {
     ht_searching_out(hashtab, size);
     end = wtime();
     t = end - start;
-    printf("Took %.3f seconds\n\n", t);
+    printf("Took %.3f seconds\n", t);
 
     bloom_free(f);
+    ht_deletion(hashtab, size);
+    free(hashtab);
     
     /*char words[200000][8];
     FILE *inp = fopen("words.txt", "r");
@@ -273,6 +298,7 @@ int main() {
     t = end - start;
     printf("Took %.3f seconds\n", t);
 
-    bloom_free(f2);*/
+    bloom_free(f2);
+    hashtab_free(hashtab2, size);*/
     return 0;
 }
