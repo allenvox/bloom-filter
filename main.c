@@ -176,12 +176,14 @@ int main() {
     double start, end, t;
     int col = 0;
     printf("Initialization:\n");
+    getchar();
     int size = 20;
     BloomFilter *f = bloom_init(size, 0.01); // create a filter of 10 elements with falsepositive probability 1%
     listnode **hashtab = malloc(sizeof(listnode*) * size);
     hashtab_init(hashtab, size);
     
     printf("\nAdding fruits to Bloom filter:\n");
+    getchar();
     start = wtime();
     filter_inserting(f);
     end = wtime();
@@ -189,6 +191,7 @@ int main() {
     printf("Took %.3f seconds\n", t);
 
     printf("\nAdding fruits to hash table with closed addressation:\n");
+    getchar();
     start = wtime();
     ht_inserting(hashtab, size, &col);
     end = wtime();
@@ -196,6 +199,7 @@ int main() {
     printf("Took %.3f seconds, made %d collisions\n", t, col);
 
     printf("\nLookup elements that already are in Bloom filter:\n");
+    getchar();
     start = wtime();
     filter_searching_in(f);
     end = wtime();
@@ -203,6 +207,7 @@ int main() {
     printf("Took %.3f seconds\n", t);
 
     printf("\nLookup elements that already are in hash table:\n");
+    getchar();
     start = wtime();
     ht_searching_in(hashtab, size);
     end = wtime();
@@ -210,6 +215,7 @@ int main() {
     printf("Took %.3f seconds\n", t);
 
     printf("\nLookup elements that are not in Bloom filter:\n");
+    getchar();
     start = wtime();
     filter_searching_out(f);
     end = wtime();
@@ -217,6 +223,7 @@ int main() {
     printf("Took %.3f seconds\n", t);
 
     printf("\nLookup elements that are not in hash table:\n");
+    getchar();
     start = wtime();
     ht_searching_out(hashtab, size);
     end = wtime();
@@ -226,6 +233,7 @@ int main() {
     bloom_free(f);
     ht_deletion(hashtab, size);
     free(hashtab);
+    getchar();
     
     /*char words[200000][8];
     FILE *inp = fopen("words.txt", "r");
